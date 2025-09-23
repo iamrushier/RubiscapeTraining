@@ -21,17 +21,31 @@ class Scheduler:
                 return ind
         return -1
     
+    def check_conflict_datetime(self,event:Event) -> bool:
+        for e in self.events_list:
+            if e.date==event.date and e.time==event.time:
+                return True
+        return False
+    
     def add_event(self, event:Event) -> bool:
+        if self.check_conflict_datetime(event):
+            print("Conflicting event found")
+            return False
         if self.exists(event.name)==-1:
             self.events_list.append(event)
             return True
+        print("Event already exists")
         return False
     
     def update(self, old_event_name:str,new_event:Event) -> bool:
+        if self.check_conflict_datetime(new_event):
+            print("Conflicting event found")
+            return False
         ind=self.exists(old_event_name)
         if(ind!=-1):
             self.events_list=self.events_list[:ind]+[new_event]+self.events_list[ind+1:]
             return True
+        print("Event does not exist")
         return False
         
     
@@ -53,31 +67,31 @@ def mainloop():
         print("3. Remove event")
         print("4. Show events")
         print("5. Exit")
-        choice=int(input("Enter choice:"))
-        if choice==1:
+        choice=input("Enter choice:")
+        if choice=='1':
             print("Add event details:")
             name=input("Event name:")
-            date=input("Event date:")
-            time=input("Event time:")
+            date=input("Event date(dd:mm:yy):")
+            time=input("Event time(hh:mm):")
             desc=input("Event description:")
             event=Event(name,date,time,desc)
             if scheduler.add_event(event):
                 print("Event added successfully")
             else:
-                print("Event with this name already exists")
-        elif choice==2:
+                print("Event not added")
+        elif choice=='2':
             print("Update event details:")
             old_name=input("Old event name:")
             name=input("New event name:")
-            date=input("New event date:")
-            time=input("New event time:")
+            date=input("New event date(dd:mm:yy):")
+            time=input("New event time(hh:mm):")
             desc=input("New event description:")
             event=Event(name,date,time,desc)
             if scheduler.update(old_name,event):
                 print("Event updated successfully")
             else:
-                print("Event does not exist")
-        elif choice==3:
+                print("Event not updated")
+        elif choice=='3':
             print("Remove event details:")
             name=input("Event name:")
             event=scheduler.delete_event(name)
@@ -85,9 +99,9 @@ def mainloop():
                 print("Following event removed successfully: ",event)
             else:
                 print("Event does not exist")
-        elif choice==4:
+        elif choice=='4':
             print("Available events: ",scheduler)
-        elif choice==5:
+        elif choice=='5':
             print("Exiting scheduler...\nHere are the events: ",scheduler)
             break
         else:
