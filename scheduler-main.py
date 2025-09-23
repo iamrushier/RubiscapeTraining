@@ -67,8 +67,12 @@ def mainloop():
         print("3. Remove event")
         print("4. Show events")
         print("5. Exit")
-        choice=input("Enter choice:")
-        if choice=='1':
+        try:
+            choice = int(input("\nEnter your choice: "))
+        except ValueError:
+            print("Invalid input, please enter a number")
+            continue
+        if choice==1:
             print("Add event details:")
             name=input("Event name:")
             date=input("Event date(dd:mm:yy):")
@@ -79,7 +83,7 @@ def mainloop():
                 print("Event added successfully")
             else:
                 print("Event not added")
-        elif choice=='2':
+        elif choice==2:
             print("Update event details:")
             old_name=input("Old event name:")
             name=input("New event name:")
@@ -91,7 +95,7 @@ def mainloop():
                 print("Event updated successfully")
             else:
                 print("Event not updated")
-        elif choice=='3':
+        elif choice==3:
             print("Remove event details:")
             name=input("Event name:")
             event=scheduler.delete_event(name)
@@ -99,14 +103,11 @@ def mainloop():
                 print("Following event removed successfully: ",event)
             else:
                 print("Event does not exist")
-        elif choice=='4':
+        elif choice==4:
             print("Available events: ",scheduler)
-        elif choice=='5':
+        elif choice==5:
             print("Exiting scheduler...\nHere are the events: ",scheduler)
             break
-        else:
-            print("Invalid choice")
-            continue
 
 if __name__=="__main__":
     mainloop()
