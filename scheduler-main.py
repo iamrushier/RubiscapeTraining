@@ -13,7 +13,7 @@ class Scheduler:
     def __init__(self):
         self.events_list=[]
     def __str__(self):
-        return self.events_list
+        return str([event.name for event in self.events_list])
     
     def exists(self,event_name:str) -> int:
         for ind,event in enumerate(self.events_list):
@@ -27,8 +27,8 @@ class Scheduler:
             return True
         return False
     
-    def update(self, old_event:Event,new_event:Event) -> bool:
-        ind=self.exists(old_event.name)
+    def update(self, old_event_name:str,new_event:Event) -> bool:
+        ind=self.exists(old_event_name)
         if(ind!=-1):
             self.events_list=self.events_list[:ind]+[new_event]+self.events_list[ind+1:]
             return True
@@ -51,7 +51,8 @@ def mainloop():
         print("1. Add event")
         print("2. Update event")
         print("3. Remove event")
-        print("4. Exit")
+        print("4. Show events")
+        print("5. Exit")
         choice=int(input("Enter choice:"))
         if choice==1:
             print("Add event details:")
@@ -65,22 +66,33 @@ def mainloop():
             else:
                 print("Event with this name already exists")
         elif choice==2:
-            event=Event()
-            pass
+            print("Update event details:")
+            old_name=input("Old event name:")
+            name=input("New event name:")
+            date=input("New event date:")
+            time=input("New event time:")
+            desc=input("New event description:")
+            event=Event(name,date,time,desc)
+            if scheduler.update(old_name,event):
+                print("Event updated successfully")
+            else:
+                print("Event does not exist")
         elif choice==3:
-            pass
+            print("Remove event details:")
+            name=input("Event name:")
+            event=scheduler.delete_event(name)
+            if event:
+                print("Following event removed successfully: ",event)
+            else:
+                print("Event does not exist")
         elif choice==4:
+            print("Available events: ",scheduler)
+        elif choice==5:
             print("Exiting scheduler...\nHere are the events: ",scheduler)
             break
         else:
+            print("Invalid choice")
             continue
 
 if __name__=="__main__":
-    # mainloop()
-    pass
-
-sched=Scheduler()
-event1=Event("one","222","44","one desc")
-event2=Event("two","222","44","one desc")
-event3=Event("three","222","44","one desc")
-sched.add_event(event1)
+    mainloop()
