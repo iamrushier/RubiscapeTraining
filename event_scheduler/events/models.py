@@ -10,5 +10,8 @@ class Event(models.Model):
     
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='events')
     
+    class Meta:
+        unique_together = ('user', 'date', 'time')  # Prevent scheduling conflicts
+
     def __str__(self):
-        return self.name
+        return f"{self.name} on {self.date} at {self.time}"

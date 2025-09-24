@@ -1,3 +1,4 @@
 .venv
 *.sqlite3
 event_scheduler/__pycache__
+events/__pycache__
