@@ -1,3 +1,9 @@
 from django.db import models
 
-# Create your models here.
+class Event(models.Model):
+    name = models.CharField(max_length=255)
+    date = models.DateField()
+    time = models.TimeField()
+    description = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
