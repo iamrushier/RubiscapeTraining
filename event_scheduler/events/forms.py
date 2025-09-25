@@ -15,3 +15,16 @@ class EventForm(forms.ModelForm):
                 'type':'time'
             }),
         }
+    def __init__(self, *args, **kwargs):
+        self.user=kwargs.pop("user",None)
+        super().__init__(*args,**kwargs)
+        
+    def clean(self):
+        cleaned_data=super().clean()
+        date=cleaned_data.get("date")
+        time=cleaned_data.get("time")
+        if self.user and date and time:
+            conflict = Event.objects.filter(user=self.user, date=date, time=time).exists()
+            if conflict:
+                self.add_error("time","Err: You already have and event at this date and time")
+        return cleaned_data

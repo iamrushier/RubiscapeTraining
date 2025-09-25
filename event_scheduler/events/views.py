@@ -12,12 +12,12 @@ def my_events(request):
 @login_required
 def create_event(request):
     if request.method == 'POST':
-        form = EventForm(request.POST)
+        form = EventForm(request.POST, user=request.user)
         if form.is_valid():
             event= form.save(commit=False)
             event.user=request.user
             event.save()
             return redirect('my_events')
     else:
-        form = EventForm()
+        form = EventForm(user=request.user)
     return render(request, 'events/create_event.html', {'form':form})
