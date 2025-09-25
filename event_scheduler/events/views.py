@@ -22,7 +22,7 @@ def create_event(request):
         form = EventForm(user=request.user)
     return render(request, 'events/create_event.html', {'form':form})
 
-
+@login_required
 def update_event(request, event_id):
     event = get_object_or_404(Event, id=event_id, user=request.user)
     if request.method=='POST':
@@ -33,3 +33,11 @@ def update_event(request, event_id):
     else:
         form = EventForm(instance=event, user=request.user)
     return render(request, 'events/update_event.html', {'form':form})
+
+@login_required
+def delete_event(request, event_id):
+    event = get_object_or_404(Event, id=event_id, user=request.user)
+    if request.method=="POST":
+        event.delete()
+        return redirect("my_events")
+    return render(request, "events/delete_event.html", {'event':event})
