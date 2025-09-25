@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %} Events {% endblock %}
+
+{% block content %} 
+<h2>
+    My Events
+</h2>
+{% comment %} <a href="{% url 'create_event' %}">Create New Event</a> {% endcomment %}
+
+<ul>
+    {% for event in events %}
+    <li>
+       <b>{{ event.name}}</b> - {{event.date}} {{ event.time }} &nbsp
+       <p>{{ event.description }}</p>
+    </li>
+    {% empty %}
+    <li>No events scheduled</li>
+    {% endfor %}
+</ul>
+<a href="{% url 'home' %}">Back to Home</a>
+{% endblock %}
