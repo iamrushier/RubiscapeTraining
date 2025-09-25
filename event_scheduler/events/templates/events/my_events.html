@@ -12,6 +12,7 @@
     <li>
        <b>{{ event.name}}</b> - {{event.date}} {{ event.time }} &nbsp
        <p>{{ event.description }}</p>
+       <a href="{% url 'update_event' event.id %}">Update</a>
     </li>
     {% empty %}
     <li>No events scheduled</li>

@@ -24,7 +24,12 @@ class EventForm(forms.ModelForm):
         date=cleaned_data.get("date")
         time=cleaned_data.get("time")
         if self.user and date and time:
-            conflict = Event.objects.filter(user=self.user, date=date, time=time).exists()
-            if conflict:
+            # query set
+            qs=Event.objects.filter(user=self.user, date=date, time=time)
+            
+            if self.instance.pk: # if pk exists -> means update
+                qs=qs.exclude(pk=self.instance.pk)
+                
+            if qs.exists():
                 self.add_error("time","Err: You already have and event at this date and time")
         return cleaned_data

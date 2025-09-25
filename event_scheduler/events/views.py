@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from .models import Event
 from .forms import EventForm
@@ -21,3 +21,15 @@ def create_event(request):
     else:
         form = EventForm(user=request.user)
     return render(request, 'events/create_event.html', {'form':form})
+
+
+def update_event(request, event_id):
+    event = get_object_or_404(Event, id=event_id, user=request.user)
+    if request.method=='POST':
+        form = EventForm(request.POST, instance=event, user=request.user)
+        if form.is_valid():
+            form.save()
+            return redirect("my_events")
+    else:
+        form = EventForm(instance=event, user=request.user)
+    return render(request, 'events/update_event.html', {'form':form})
